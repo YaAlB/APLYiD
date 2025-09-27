@@ -1,0 +1,13 @@
+[
+  { "company": "Sharesies",   "type": "sms",   "country": "AU" },
+  { "company": "Mighty Ape",   "type": "email", "country": "NZ" },
+  { "company": "Sharesies",   "type": "sms",   "country": "NZ" },
+  { "company": "Sharesies",   "type": "sms",   "country": "UK" },
+  { "company": "Sharesies",   "type": "sms",   "country": "UK" },
+  { "company": "Mighty Ape", "type": "email", "country": "NZ" },
+  { "company": "Mighty Ape", "type": "sms", "country": "AU" },
+  { "company": "TradeMe",   "type": "sms",   "country": "NZ" },
+  { "company": "TradeMe",   "type": "email",   "country": "NZ" },
+  { "company": "TradeMe",   "type": "email",   "country": "NZ" },
+  { "company": "TradeMe",   "type": "sms",   "country": "NZ" }
+]

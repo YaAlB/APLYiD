@@ -1,0 +1,18 @@
+[
+  {
+    "notification_type": "sms",
+    "prices": {
+      "AU": 0.50,
+      "NZ": 0.45,
+      "UK": 0.40
+    }
+  },
+  {
+    "notification_type": "email",
+    "prices": {
+      "AU": 0.10,
+      "NZ": 0.08,
+      "UK": 0.12
+    }
+  }
+]
