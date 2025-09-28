@@ -1,64 +1,109 @@
-# APLYiD Technical Test
+# APLYiD Technical Test - Development Guide
 
-When a customer of one our clients/companies finishes an action we send notifications via SMS and Email to that company. For example, "John Doe" which is a client of Company "Apple" finishes a biometric verification, so we send a notification to company "Apple" that John Doe finished his verification.
+## Getting Started
 
-Each notification has a different cost depending on which country it’s sent to (NZ, AU or UK).
+### Prerequisites
+- Ruby 3.1.2 or higher
+- Bundler gem
 
-We keep the logs when a notification is sent to a company available in `data/notification_logs.json` file.
-
-We need to track how much each company spends on notifications so we can bill them.
-
-## Requirements
-
-1. Calculate for each company: total cost = ∑( per-notification cost for that type & country )
-2. Print (via Rake) a human-readable table:
-
-Company           Count    Cost
---------------------------------
-Sharesies         4        $X
-Mighty Ape        3        $Y
-TradeMe           4        $Z
-
-3. Write readable specs
-
-## How to get started
-1. Unzip and unpack the file in your project directory
-2. Install Ruby & Bundler, then run:
-```
+### Setup
+```bash
+# Install dependencies
 bundle install
 
+# Run the application
+bundle exec rake
+
+# Run tests
+bundle exec rspec
 ```
-Available commands:
+
+## Code Organisation
+
+### Domain Models
+
+#### Notification
+```ruby
+# Create a notification
+notification = Notification.new(
+  company: 'Apple',
+  type: 'sms',
+  country: 'AU'
+)
+
+# From hash data
+notification = Notification.from_hash({
+  'company' => 'Apple',
+  'type' => 'sms',
+  'country' => 'AU'
+})
+
+# Check if notification matches criteria
+notification.matches?(type: 'sms', country: 'AU') # => true
 ```
-bundle exec rake → runs your app and prints the table
 
-bundle exec rspec → runs the specs
+#### Pricing
+```ruby
+# Load pricing from JSON
+pricing = Pricing.new(pricing_json)
+
+# Get cost for notification
+cost = pricing.cost_for(type: 'sms', country: 'AU') # => 0.50
+
+# Get available types and countries
+pricing.available_types # => ['sms', 'email']
+pricing.available_countries_for('sms') # => ['AU', 'NZ', 'UK']
 ```
 
+#### CompanySummary
+```ruby
+# Create company summary
+summary = CompanySummary.new('Apple')
 
-## Submission
-1. Push all of your finished code to the default branch of your repo (e.g. main or master).
-2. From the root of your project folder, create a tarball named with your own name:
+# Add notifications
+summary.add_notification(notification1)
+summary.add_notification(notification2)
+
+# Calculate costs
+summary.calculate_cost!(pricing)
+
+# Get statistics
+summary.notification_count # => 2
+summary.count_by_type('sms') # => 1
+summary.count_by_country('AU') # => 1
+
+# Convert to hash for output
+summary.to_hash # => { 'company' => 'Apple', 'notification_count' => 2, 'cost' => 1.0 }
 ```
-tar -czvf YourFirstName_YourLastName.tar.gz .
+
+### Main Application
+
+#### NotificationApp
+```ruby
+# Simple interface for calculating costs
+result = NotificationApp.call(pricing_json, logs_json)
+
+# Result format
+[
+  {
+    'company' => 'Apple',
+    'notification_count' => 3,
+    'cost' => 1.50
+  },
+  # ... more companies
+]
 ```
-3. Reply to the original assignment email (or send directly to your contact) with that archive attached.
 
-## Important Notes
+## Testing
 
-**Modelling**
-Break responsibilities into clear classes/modules.
+### Running Tests
+```bash
+# Run all tests
+bundle exec rspec
 
-No single God-class that parses everything.
+# Run specific test file
+bundle exec rspec spec/notification_spec.rb
 
-**Naming**
-Classes, methods, and variables should be descriptive and consistent.
-
-**Production Quality**
-Consistency in style and formatting.
-
-**Testing**
-Add unit and edge-case tests where you see value.
-
-**Error Handling**
-Guard against potential errors
+# Run specific test
+bundle exec rspec spec/notification_spec.rb:25
+```
