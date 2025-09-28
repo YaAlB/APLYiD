@@ -1,4 +1,4 @@
-# APLYiD Technical Test - Development Guide
+# APLYiD Technical Test
 
 ## Getting Started
 
